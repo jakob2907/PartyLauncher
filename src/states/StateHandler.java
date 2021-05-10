@@ -3,6 +3,7 @@ package states;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class StateHandler {
@@ -13,7 +14,8 @@ public class StateHandler {
     String firstgame = "pong";
 
     HashMap<String, BasicState> states;
-    HashMap<String, Game> games;
+
+    ArrayList<String> games;
 
     BasicState startScreen, startState, selectState;
     Game pong, supermario;
@@ -45,16 +47,10 @@ public class StateHandler {
 
 
         //weitere States...
-
-        games = new HashMap<String ,Game>();
-
-        pong = new Game();
-        games.put("pong", pong);
-
-        supermario = new Game();
-        games.put("supermario", supermario);
-
-        state = "startscreen";
+        games = new ArrayList<>();
+        games.add("pong");
+        games.add("Supermario");
+        games.add("schach");
 
     }
 
@@ -77,14 +73,12 @@ public class StateHandler {
 
         if(state.equals("selectstate"))
         {
-               if(game.equals("pong"))
+               for(int i = 0; i < games.size(); i++)
                {
-                   game = "supermario";
-                   System.out.println(game);
-               }
-               else{
-                    game = "pong";
-                   System.out.println(game);
+                   if(games.get(i).equals(game))
+                   {
+                        game = games.get(i+1);
+                   }
                }
         }
         else

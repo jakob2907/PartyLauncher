@@ -1,3 +1,4 @@
+import games.Pong.Pong;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -19,15 +20,14 @@ public class main extends Application {
 
         stateHandler = new StateHandler(window);
 
-        //StartState st = new StartState(stateHandler);
-        //StartScreen sc = new StartScreen(stateHandler);
-        //SelectState ss = new SelectState(stateHandler);
-
-        //Scene s = ss.getScene();
-        //Scene s = stateHandler.getScene();
-
-
+        //richtiger Code
         window.setScene(stateHandler.getScene());
+
+        //Probe Code
+        //Pong p = new Pong();
+
+        //window.setScene(p.getScene());
+
         window.getIcons().add(new Image("/graphics/StageIconChess.png"));
         window.resizableProperty().setValue(Boolean.FALSE);
         window.show();
