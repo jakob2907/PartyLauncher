@@ -58,6 +58,7 @@ public class StartState extends BasicState{
                 if(event.getCode() == KeyCode.ENTER)
                 {
                     sh.change("selectstate");
+
                 }
             }
         });

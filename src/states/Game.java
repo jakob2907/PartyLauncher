@@ -1,3 +1,5 @@
+package states;
+
 import javafx.scene.image.Image;
 
 public class Game {
@@ -11,6 +13,11 @@ public class Game {
         this.ersteller = ersteller;
         this.programmierspreche = programmiersprache;
         this.background = background;
+    }
+
+    public Game()
+    {
+
     }
 
     public String getName() {

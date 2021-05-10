@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/PongFX.iml" filepath="$PROJECT_DIR$/PongFX.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PartyLauncher.iml" filepath="$PROJECT_DIR$/PartyLauncher.iml" />
     </modules>
   </component>
 </project>

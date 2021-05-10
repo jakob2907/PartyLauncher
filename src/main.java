@@ -21,13 +21,13 @@ public class main extends Application {
 
         //StartState st = new StartState(stateHandler);
         //StartScreen sc = new StartScreen(stateHandler);
-        SelectState ss = new SelectState(stateHandler);
+        //SelectState ss = new SelectState(stateHandler);
 
-        Scene s = ss.getScene();
+        //Scene s = ss.getScene();
         //Scene s = stateHandler.getScene();
 
 
-        window.setScene(s);
+        window.setScene(stateHandler.getScene());
         window.getIcons().add(new Image("/graphics/StageIconChess.png"));
         window.resizableProperty().setValue(Boolean.FALSE);
         window.show();
