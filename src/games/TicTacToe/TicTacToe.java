@@ -260,7 +260,6 @@ public class TicTacToe extends Game {
 
     }
 
-
     public Scene getScene()
     {
         return s;

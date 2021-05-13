@@ -1,3 +1,4 @@
+import games.Chess.Chess;
 import games.Pong.Pong;
 import games.TicTacToe.TicTacToe;
 import javafx.application.Application;
@@ -26,14 +27,15 @@ public class main extends Application {
 
         //Probe Code Pong
         //Pong p = new Pong();
-
-
         //window.setScene(p.getScene());
 
         //Probe Code TTT
-        TicTacToe ttt = new TicTacToe();
+        //TicTacToe ttt = new TicTacToe();
+        //window.setScene(ttt.getScene());
 
-        window.setScene(ttt.getScene());
+        //Probe Code Chess
+        Chess c = new Chess();
+        window.setScene(c.getScene());
 
         window.getIcons().add(new Image("/graphics/StageIconChess.png"));
         window.resizableProperty().setValue(Boolean.FALSE);

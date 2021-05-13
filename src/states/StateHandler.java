@@ -1,5 +1,8 @@
 package states;
 
+import games.Pong.Pong;
+import games.SuperMario.SuperMario;
+import games.TicTacToe.TicTacToe;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
@@ -12,13 +15,15 @@ public class StateHandler {
 
     String state, game;
     String firstgame = "pong";
+    String firstState = "startscreen";
 
     HashMap<String, BasicState> states;
-
-    ArrayList<String> games;
+    HashMap<String, Game> games;
 
     BasicState startScreen, startState, selectState;
-    Game pong, supermario;
+    Game pong,tictactoe,supermario;
+
+    boolean startedGame;
 
 
     public StateHandler(Stage window)
@@ -32,6 +37,7 @@ public class StateHandler {
         //Alle States werden in einer Hash Map organisiert String Key für return des States
     public void createHashMap()
     {
+        state = firstState;
         game = firstgame;
 
         states = new HashMap<String, BasicState>();
@@ -47,10 +53,22 @@ public class StateHandler {
 
 
         //weitere States...
-        games = new ArrayList<>();
-        games.add("pong");
-        games.add("Supermario");
-        games.add("schach");
+
+        //Games die verwaltet werden
+
+        games = new HashMap<>();
+
+        pong = new Pong();
+        pong.setNeighbours("supermario", "tictactoe");
+        games.put("pong", pong);
+
+        tictactoe = new TicTacToe();
+        tictactoe.setNeighbours("pong", "supermario");
+        games.put("tictactoe", tictactoe);
+
+        supermario = new SuperMario();
+        supermario.setNeighbours("tictactoe","pong");
+        games.put("supermario", supermario);
 
     }
 
@@ -61,30 +79,35 @@ public class StateHandler {
         window.setScene(states.get(state).getScene());
     }
 
-    public Scene getScene()
-    {
-        return states.get(state).getScene();
+    public Scene getScene() {
+
+        if (startedGame) {
+
+            System.out.println(startedGame);
+            return games.get(game).getScene();
+
+
+        } else {
+            System.out.println(startedGame);
+            return states.get(state).getScene();
+
+        }
     }
 
 
     //wenn mehrere Games eingefügt werden, Methode MUSS geändert werden -> HARDCODE!!!!
 
-    public void changeGame() {
+    public void changeGame(String direction) {
 
-        if(state.equals("selectstate"))
+        if(direction.equals("forward"))
         {
-               for(int i = 0; i < games.size(); i++)
-               {
-                   if(games.get(i).equals(game))
-                   {
-                        game = games.get(i+1);
-                   }
-               }
+            game = games.get(game).getNextGame();
         }
         else
         {
-            System.out.println("ChangeGame nicht ordnungsgemäß aufgerufen - nicht in Select State");
+            game = games.get(game).getPreviousGame();
         }
+
 
     }
 
@@ -97,4 +120,23 @@ public class StateHandler {
 
         this.game = game;
     }
+
+    public HashMap<String, Game> getGames() {
+        return games;
+    }
+
+    public boolean isStartedGame() {
+        return startedGame;
+    }
+
+    public void setStartedGame(boolean startedGame) {
+        this.startedGame = startedGame;
+    }
+
+    public boolean getStartedGame()
+    {
+        return startedGame;
+    }
+
+
 }

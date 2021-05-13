@@ -7,12 +7,13 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
+import states.Game;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.BitSet;
 
-public class Pong {
+public class Pong extends Game {
 
     Scene s;
 
