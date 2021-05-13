@@ -24,12 +24,12 @@ public class ButtonTTT extends Button {
 
                     if (t.getPlayer() == 1) {
                         setStyle("-fx-background-color: #383838");
-                        player = 1;
+                        player = 2;
                         t.checkWin();
                         t.setPlayer(2);
                     } else {
                         setStyle("-fx-background-color: #FF0000");
-                        player = 2;
+                        player = 1;
                         t.checkWin();
                         t.setPlayer(1);
                     }
