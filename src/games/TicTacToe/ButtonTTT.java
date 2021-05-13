@@ -42,4 +42,10 @@ public class ButtonTTT extends Button {
     {
         return player;
     }
+
+    public void setStandard(){
+        setDisable(false);
+        setStyle("-fx-background-color: #FFFFFF");
+    }
+
 }
