@@ -15,7 +15,7 @@ public class ButtonTTT extends Button {
     {
         super();
         setMaxSize(200,200);
-
+        setStyle("-fx-background-color: #4d0000");
         this.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -23,16 +23,21 @@ public class ButtonTTT extends Button {
                 if (t.isRunning()) {
 
                     if (t.getPlayer() == 1) {
+                        setDisable(true);
                         setStyle("-fx-background-color: #383838");
-                        player = 1;
-                        t.checkWin();
-                        t.setPlayer(2);
-                    } else {
-                        setStyle("-fx-background-color: #FF0000");
                         player = 2;
                         t.checkWin();
+                        t.setPlayer(2);
+                        t.setMoves();
+                    } else {
+                        setDisable(true);
+                        setStyle("-fx-background-color: #FF0000");
+                        player = 1;
+                        t.checkWin();
                         t.setPlayer(1);
+                        t.setMoves();
                     }
+
                 }
             }
         });
@@ -43,9 +48,12 @@ public class ButtonTTT extends Button {
         return player;
     }
 
-    public void setStandard(){
+    public void setStandard()
+    {
+        player=0;
+        setStyle("-fx-background-color: #4d0000");
         setDisable(false);
-        setStyle("-fx-background-color: #FFFFFF");
+
     }
 
 }

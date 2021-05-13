@@ -32,6 +32,7 @@ public class TicTacToe extends Game {
     int scorep1;
     int scorep2;
     Button nextGame;
+    int moves=0;
 
 
     ArrayList<ButtonTTT> buttons = new ArrayList<>();
@@ -119,14 +120,6 @@ public class TicTacToe extends Game {
         grid.add(p2,4,0);
 
         nextGame = new Button("Next Game");
-
-        nextGame.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-
-
-            }
-        });
         nextGame.setVisible(false);
 
         nextGame.setOnAction(new EventHandler<ActionEvent>() {
@@ -134,6 +127,8 @@ public class TicTacToe extends Game {
             public void handle(ActionEvent event) {
                 nextGame();
                 nextGame.setVisible(false);
+                running = true;
+                lWin.setVisible(false);
             }
         });
 
@@ -244,6 +239,12 @@ public class TicTacToe extends Game {
             return b7.getColor();
         }
 
+        else if(moves>=9){
+            lWin.setText("Unentschieden");
+            lWin.setVisible(true);
+            nextGame.setVisible(true);
+        }
+
         return 0;
     }
 
@@ -295,4 +296,8 @@ public class TicTacToe extends Game {
             buttons.get(i).setStandard();
         }
     }
+    public void setMoves() {
+        moves++;
+    }
+
 }
