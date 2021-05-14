@@ -1,11 +1,16 @@
 package states;
 
+import javafx.scene.Scene;
 import javafx.scene.image.Image;
 
 public class Game {
 
+    Scene s;
+
     String name, ersteller, programmierspreche;
     Image background;
+
+    String previousGame, nextGame;
 
     public Game(String name, String ersteller, String programmiersprache, Image background)
     {
@@ -18,6 +23,32 @@ public class Game {
     public Game()
     {
 
+    }
+
+    public Scene getScene() {
+        return null;
+    }
+
+    public void setNeighbours(String pGame,String nGame)
+    {
+        previousGame = pGame;
+        nextGame = nGame;
+    }
+
+    public void setNextGame(String nextGame) {
+        this.nextGame = nextGame;
+    }
+
+    public String getNextGame(){
+        return nextGame;
+    }
+
+    public String getPreviousGame() {
+        return previousGame;
+    }
+
+    public void setPreviousGame(String previousGame) {
+        this.previousGame = previousGame;
     }
 
     public String getName() {

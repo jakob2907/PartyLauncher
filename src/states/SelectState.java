@@ -23,6 +23,7 @@ public class SelectState extends BasicState {
     Button game;
     Label gLabel;
 
+    //wenn started == false, Button zeigt Name des Spiels an
     boolean started = false;
 
     public SelectState(StateHandler sh) {
@@ -57,7 +58,7 @@ public class SelectState extends BasicState {
 
                 if(!started) {
                     System.out.println("Skipped Back");
-                    sh.changeGame();
+                    sh.changeGame("forward");
                     game.setText(sh.getGame());
                     gLabel.setText(sh.getGame() + " ist gestartet");
                 }
@@ -74,7 +75,7 @@ public class SelectState extends BasicState {
             public void handle(ActionEvent event) {
                 if(!started) {
                     System.out.println("Skipped Forward");
-                    sh.changeGame();
+                    sh.changeGame("back");
                     game.setText(sh.getGame());
                     gLabel.setText(sh.getGame() + " ist gestartet");
                 }
@@ -97,9 +98,15 @@ public class SelectState extends BasicState {
         game.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                game.setVisible(false);
-                gLabel.setVisible(true);
-                started = true;
+                //game.setVisible(false);
+                //started = true;
+
+
+                sh.setStartedGame(true);
+                System.out.println(sh.getStartedGame());
+
+
+
             }
         });
 
