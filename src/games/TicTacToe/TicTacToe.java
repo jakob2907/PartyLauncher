@@ -131,6 +131,7 @@ public class TicTacToe extends BasicGame {
                 nextGame.setVisible(false);
                 running = true;
                 lWin.setVisible(false);
+                moves=0;
             }
         });
 
