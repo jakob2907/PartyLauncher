@@ -29,11 +29,7 @@ public class Game {
         return null;
     }
 
-    public void setNeighbours(String pGame,String nGame)
-    {
-        previousGame = pGame;
-        nextGame = nGame;
-    }
+
 
     public void setNextGame(String nextGame) {
         this.nextGame = nextGame;

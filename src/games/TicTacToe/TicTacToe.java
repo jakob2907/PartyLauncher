@@ -13,11 +13,13 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
+import states.BasicGame;
 import states.Game;
+import states.StateHandler;
 
 import java.util.ArrayList;
 
-public class TicTacToe extends Game {
+public class TicTacToe extends BasicGame {
 
     int player;
 
@@ -37,9 +39,9 @@ public class TicTacToe extends Game {
 
     ArrayList<ButtonTTT> buttons = new ArrayList<>();
 
-    public TicTacToe()
+    public TicTacToe(StateHandler sh)
     {
-        super();
+        super(sh);
 
         scorep1=0;
         scorep2=0;

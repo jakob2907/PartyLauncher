@@ -7,13 +7,16 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
+import states.BasicGame;
+import states.BasicState;
 import states.Game;
+import states.StateHandler;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.BitSet;
 
-public class Pong extends Game {
+public class Pong extends BasicGame {
 
     Scene s;
 
@@ -23,8 +26,10 @@ public class Pong extends Game {
     private BitSet keyboardBitSet = new BitSet();
     private int scored = 0;
 
-    public Pong()
+    public Pong(StateHandler sh)
     {
+        super(sh);
+
             Pane p = new Pane();
 
             p1 = new Paddle(10, 8, 20, 50);
@@ -217,4 +222,5 @@ public class Pong extends Game {
     {
         return s;
     }
+
 }

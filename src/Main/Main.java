@@ -1,3 +1,5 @@
+package Main;
+
 import games.Chess.Chess;
 import games.Pong.Pong;
 import games.TicTacToe.TicTacToe;
@@ -10,7 +12,7 @@ import states.StartScreen;
 import states.StartState;
 import states.StateHandler;
 
-public class main extends Application {
+public class Main extends Application {
 
     Stage window;
 
@@ -20,10 +22,10 @@ public class main extends Application {
     public void start(Stage primaryStage) throws Exception {
         window = primaryStage;
 
-        stateHandler = new StateHandler(window);
+        stateHandler = new StateHandler(this, window);
 
         //richtiger Code
-        //window.setScene(stateHandler.getScene());
+        window.setScene(stateHandler.getScene());
 
         //Probe Code Pong
         //Pong p = new Pong();
@@ -34,13 +36,23 @@ public class main extends Application {
         //window.setScene(ttt.getScene());
 
         //Probe Code Chess
-        Chess c = new Chess();
-        window.setScene(c.getScene());
+        //Chess c = new Chess();
+        //window.setScene(c.getScene());
 
         window.getIcons().add(new Image("/graphics/StageIconChess.png"));
         window.resizableProperty().setValue(Boolean.FALSE);
         window.show();
 
+    }
+
+    //neues Fenster für Games
+
+    public void startGame(Stage window) throws Exception
+    {
+
+        window.getIcons().add(new Image("/graphics/StageIconChess.png"));
+        window.resizableProperty().setValue(Boolean.FALSE);
+        window.show();
     }
 
     public static void main(String[] args) {

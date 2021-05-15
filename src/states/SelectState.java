@@ -1,11 +1,13 @@
 package states;
 
+import Main.Main;
 import games.Pong.Pong;
+import games.SuperMario.SuperMario;
+import games.TicTacToe.TicTacToe;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -17,17 +19,28 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
+
+import java.util.HashMap;
 
 public class SelectState extends BasicState {
 
-    Button game;
+    Button gameStart;
     Label gLabel;
 
     //wenn started == false, Button zeigt Name des Spiels an
     boolean started = false;
 
+    BasicGame pong,tictactoe,supermario;
+    HashMap<String, BasicGame> games;
+    String game = "pong";
+
+    Scene sceneSelect;
+
     public SelectState(StateHandler sh) {
         super(sh);
+
+        createGames(sh);
 
         GridPane grid = new GridPane();
 
@@ -57,9 +70,12 @@ public class SelectState extends BasicState {
             public void handle(ActionEvent event) {
 
                 if(!started) {
+
+                    //Back Skippen
+
                     System.out.println("Skipped Back");
-                    sh.changeGame("forward");
-                    game.setText(sh.getGame());
+                    changeGame("forward");
+                    gameStart.setText(game);
                     gLabel.setText(sh.getGame() + " ist gestartet");
                 }
             }
@@ -74,20 +90,23 @@ public class SelectState extends BasicState {
             @Override
             public void handle(ActionEvent event) {
                 if(!started) {
+
+                    //Forward Skippen
+
                     System.out.println("Skipped Forward");
-                    sh.changeGame("back");
-                    game.setText(sh.getGame());
-                    gLabel.setText(sh.getGame() + " ist gestartet");
+                    changeGame("back");
+                    gameStart.setText(game);
+                    gLabel.setText(game + " ist gestartet");
                 }
             }
         });
         GridPane.setHalignment(skipForward, HPos.CENTER);
 
-        game = new Button();
-        game.setText(sh.getGame());
-        game.setMaxSize(200,200);
+        gameStart = new Button();
+        gameStart.setText(game);
+        gameStart.setMaxSize(200,200);
 
-        GridPane.setHalignment(game, HPos.CENTER);
+        GridPane.setHalignment(gameStart, HPos.CENTER);
 
         gLabel = new Label();
         gLabel.setText(sh.getGame() + " ist gestartet");
@@ -95,49 +114,87 @@ public class SelectState extends BasicState {
 
         GridPane.setHalignment(gLabel, HPos.CENTER);
 
-        game.setOnAction(new EventHandler<ActionEvent>() {
+        gameStart.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                //game.setVisible(false);
-                //started = true;
 
+                //Game starten
+                sh.getWindow().setIconified(true);
 
-                sh.setStartedGame(true);
-                System.out.println(sh.getStartedGame());
+                Stage newStage = new Stage();
+                Main gameMain = new Main();
 
+                newStage.setScene(games.get(game).getScene());
 
-
+                try {
+                    gameMain.startGame(newStage);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
 
-        GridPane.setHalignment(game, HPos.CENTER);
+        GridPane.setHalignment(gameStart, HPos.CENTER);
 
         grid.add(skipBack, 0, 2);
         grid.add(skipForward, 2,2);
-        grid.add(game, 1,1);
+        grid.add(gameStart, 1,1);
         grid.add(gLabel, 1,1);
 
 
-        s = new Scene(grid, 800, 600);
-        s.getStylesheets().add("cssFiles/SelectState.css");
-        s.setOnKeyPressed(new EventHandler<KeyEvent>() {
+        sceneSelect = new Scene(grid, 800, 600);
+        sceneSelect.getStylesheets().add("cssFiles/SelectState.css");
+        sceneSelect.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
                 if (event.getCode() == KeyCode.ENTER && !started)
                 {
                     started = true;
-                    game.setVisible(false);
+                    gameStart.setVisible(false);
                     gLabel.setVisible(true);
                 }
 
                 if(event.getCode() == KeyCode.ESCAPE && started)
                 {
                     started = false;
-                    game.setVisible(true);
+                    gameStart.setVisible(true);
                     gLabel.setVisible(false);
                 }
             }
         });
+
+        s = sceneSelect;
+    }
+
+    private void createGames(StateHandler sh) {
+
+        games = new HashMap<>();
+
+        pong = new Pong(sh);
+        pong.setNeighbours("supermario", "tictactoe");
+        games.put("pong", pong);
+
+        tictactoe = new TicTacToe(sh);
+        tictactoe.setNeighbours("pong", "supermario");
+        games.put("tictactoe", tictactoe);
+
+        supermario = new SuperMario(sh);
+        supermario.setNeighbours("tictactoe","pong");
+        games.put("supermario", supermario);
+    }
+
+    public void changeGame(String direction) {
+
+        if(direction.equals("forward"))
+        {
+            game = games.get(game).getNextGame();
+        }
+        else
+        {
+            game = games.get(game).getPreviousGame();
+        }
+
+
     }
 
     private Rectangle DrawRectangle(int x, int y, int w, int h) {
@@ -160,6 +217,10 @@ public class SelectState extends BasicState {
     @Override
     public boolean getState() {
         return false;
+    }
+
+    public HashMap<String, BasicGame> getGames() {
+        return games;
     }
 }
 
