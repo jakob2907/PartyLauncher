@@ -1,45 +1,52 @@
 package games.Chess;
 
+import com.sun.org.apache.xml.internal.utils.IntVector;
 import javafx.animation.AnimationTimer;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.RowConstraints;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+
+import java.util.HashMap;
 
 public class Chess {
 
+    //TODO Figuren auf Felder setzen, welche von Vectoren übergeben werden
+    //TODO Movement mit anzeigen der möglichen Felder der Figur bei Zug
+    //TODO Schach
+
     Scene scene;
     GridPane grid;
+    Pane pane;
 
-    Field[][] field = new Field[8][8];
+    int[] square = new int[64];
+    Rectangle[] squareRect = new Rectangle[64];
+
+    IntVector[] move = new IntVector[2];
+
+
+    Notation notation = new Notation(this);
+
+    Label firstmove, secondmove;
 
     public Chess()
     {
+        //Layout
+
         grid = new GridPane();
 
         grid.getRowConstraints().add(new RowConstraints(100));
-        grid.getRowConstraints().add(new RowConstraints(50));
-        grid.getRowConstraints().add(new RowConstraints(50));
-        grid.getRowConstraints().add(new RowConstraints(50));
-        grid.getRowConstraints().add(new RowConstraints(50));
-        grid.getRowConstraints().add(new RowConstraints(50));
-        grid.getRowConstraints().add(new RowConstraints(50));
-        grid.getRowConstraints().add(new RowConstraints(50));
-        grid.getRowConstraints().add(new RowConstraints(50));
+        grid.getRowConstraints().add(new RowConstraints(400));
         grid.getRowConstraints().add(new RowConstraints(100));
 
         grid.getColumnConstraints().add(new ColumnConstraints(200));
-        grid.getColumnConstraints().add(new ColumnConstraints(50));
-        grid.getColumnConstraints().add(new ColumnConstraints(50));
-        grid.getColumnConstraints().add(new ColumnConstraints(50));
-        grid.getColumnConstraints().add(new ColumnConstraints(50));
-        grid.getColumnConstraints().add(new ColumnConstraints(50));
-        grid.getColumnConstraints().add(new ColumnConstraints(50));
-        grid.getColumnConstraints().add(new ColumnConstraints(50));
-        grid.getColumnConstraints().add(new ColumnConstraints(50));
+        grid.getColumnConstraints().add(new ColumnConstraints(400));
         grid.getColumnConstraints().add(new ColumnConstraints(200));
 
         grid.setVgap(0);
@@ -47,206 +54,277 @@ public class Chess {
 
         grid.setPadding(new Insets(0,0,0,0));
 
-        fillFieldsRectangle();
-        placeFigures();
-        fillFieldsColor();
+        pane = new Pane();
+        pane.setPadding(new Insets(0,0,0,0));
 
+        grid.add(pane, 1,1);
+
+        GridBoard gridBoard = new GridBoard(this);
+        gridBoard.setGridLinesVisible(true);
+
+        grid.add(gridBoard,1,1);
+
+        VBox right = new VBox();
+        firstmove = new Label("Label 1");
+        secondmove = new Label("Label 2");
+
+        GridPane.setHalignment(right, HPos.CENTER);
+
+        right.getChildren().addAll(firstmove, secondmove);
+
+        grid.add(right, 2, 1);
+
+
+
+        //Variablen setzen durch Methoden
+
+        //setImages();
+
+        DrawBoard();
+        DrawSquares(Var.startFEN);
+
+        for (int i: square) {
+            System.out.print(i);
+        }
 
         //grid.setGridLinesVisible(true);
 
-        scene = new Scene(grid, 800,600);
-        scene.getStylesheets().add("cssFiles/chess.css");
+        class ATimer extends AnimationTimer
+        {
+            private volatile boolean running;
 
-        AnimationTimer at = new AnimationTimer() {
+            @Override
+            public void start()
+            {
+                super.start();
+                running = true;
+            }
+
+            @Override
+            public void stop()
+            {
+                super.stop();
+                running = false;
+            }
+
             @Override
             public void handle(long now) {
-
+                DrawBoard();
+                String s = notation.LoadPositionFromArray(square);
+                DrawSquares(s);
             }
-        };
+
+            public boolean isRunning() {
+                return running;
+            }
+        }
+
+        ATimer at = new ATimer();
+
+
+        scene = new Scene(grid, 800,600);
+        scene.getStylesheets().add("cssFiles/chess.css");
+        scene.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER && at.isRunning())
+            {
+                at.stop();
+            }else
+            {
+                at.start();
+            }
+        });
+
+        at.start();
+
+
     }
 
-    private void placeFigures()
+
+    //Schachbrett zeichnen mit Rectangles
+
+
+    private void DrawBoard() {
+
+
+
+        for(int file = 0; file < 8; file++)
+        {
+            for(int rank = 0; rank < 8; rank++)
+            {
+                boolean isLightSquare = (file + rank) % 2 != 0;
+
+                int[] squareColor = (isLightSquare) ? Var.lightColor : Var.darkColor;
+                Rectangle rect = new Rectangle(file * 50, rank * 50, 50,50);
+                rect.setFill(Color.rgb(squareColor[0], squareColor[1],squareColor[2]));
+                squareRect[file + rank*8] = rect;
+                pane.getChildren().add(rect);
+            }
+        }
+
+    }
+    //IntVector
+    //erster int File
+    //zweiter int Rank
+
+    public void addmove(IntVector vector)
     {
-        //1 = King, 2 = Queen, 3 = rook, 4 = pawn, 5 = bishop, 6 = knight -> weiß
-        //schwarz number + 10 -> 11 = King, 12 = Queen
+        //komplett neuer move
+        if(move[0] == null && move[1] == null){
 
-        //black
+            move[0] = vector;
+            firstmove.setText(move[0].elementAt(0) + " " + move[0].elementAt(1));
 
-        field[0][0].setFigure(3);
-        grid.add(field[0][0].getLabel(), 1,1);
-        GridPane.setHalignment(field[0][0].getLabel(), HPos.CENTER);
-
-        field[0][1].setFigure(5);
-        grid.add(field[0][1].getLabel(), 2,1);
-        GridPane.setHalignment(field[0][1].getLabel(), HPos.CENTER);
-
-        field[0][2].setFigure(4);
-        grid.add(field[0][2].getLabel(), 3,1);
-        GridPane.setHalignment(field[0][2].getLabel(), HPos.CENTER);
-
-        field[0][3].setFigure(2);
-        grid.add(field[0][3].getLabel(), 4,1);
-        GridPane.setHalignment(field[0][3].getLabel(), HPos.CENTER);
-
-        field[0][4].setFigure(1);
-        grid.add(field[0][4].getLabel(), 5,1);
-        GridPane.setHalignment(field[0][4].getLabel(), HPos.CENTER);
-
-        field[0][5].setFigure(4);
-        grid.add(field[0][5].getLabel(), 6,1);
-        GridPane.setHalignment(field[0][5].getLabel(), HPos.CENTER);
-
-        field[0][6].setFigure(5);
-        grid.add(field[0][6].getLabel(), 7,1);
-        GridPane.setHalignment(field[0][6].getLabel(), HPos.CENTER);
-
-        field[0][7].setFigure(3);
-        grid.add(field[0][7].getLabel(), 8,1);
-        GridPane.setHalignment(field[0][7].getLabel(), HPos.CENTER);
-
-        for(int i = 0; i < 8; i++)
-        {
-            field[1][i].setFigure(6);
-            grid.add(field[1][i].getLabel(), i+1,2);
-            GridPane.setHalignment(field[1][i].getLabel(), HPos.CENTER);
         }
-
-        field[7][0].setFigure(13);
-        grid.add(field[7][0].getLabel(), 1,8);
-        GridPane.setHalignment(field[7][0].getLabel(), HPos.CENTER);
-
-        field[7][1].setFigure(15);
-        grid.add(field[7][1].getLabel(), 2,8);
-        GridPane.setHalignment(field[7][1].getLabel(), HPos.CENTER);
-
-        field[7][2].setFigure(14);
-        grid.add(field[7][2].getLabel(), 3,8);
-        GridPane.setHalignment(field[7][2].getLabel(), HPos.CENTER);
-
-        field[7][3].setFigure(12);
-        grid.add(field[7][3].getLabel(), 4,8);
-        GridPane.setHalignment(field[7][3].getLabel(), HPos.CENTER);
-
-        field[7][4].setFigure(11);
-        grid.add(field[7][4].getLabel(), 5,8);
-        GridPane.setHalignment(field[7][4].getLabel(), HPos.CENTER);
-
-        field[7][5].setFigure(14);
-        grid.add(field[7][5].getLabel(), 6,8);
-        GridPane.setHalignment(field[7][5].getLabel(), HPos.CENTER);
-
-        field[7][6].setFigure(15);
-        grid.add(field[7][6].getLabel(), 7,8);
-        GridPane.setHalignment(field[7][6].getLabel(), HPos.CENTER);
-
-        field[7][7].setFigure(13);
-        grid.add(field[7][7].getLabel(), 8,8);
-        GridPane.setHalignment(field[7][7].getLabel(), HPos.CENTER);
-
-        for(int i = 0; i < 8; i++)
+        else
         {
-            field[6][i].setFigure(16);
-            grid.add(field[6][i].getLabel(), i+1,7);
-            GridPane.setHalignment(field[6][i].getLabel(), HPos.CENTER);
-        }
-
-        printFieldFigures();
-    }
-
-    private void fillFieldsRectangle() {
-        for(int i = 0; i < 8; i++)
-        {
-            for(int j = 0; j < 8; j++)
-            {
-                Field f = new Field(i,j);
-                field[i][j] = f;
-                f.setFigure(0);
-                grid.add(f, i+1,j+1);
-            }
-        }
-
-        printFieldColors();
-    }
-
-
-
-    private void fillFieldsColor() {
-
-        int weiss = 1;
-        int schwarz = 2;
-
-        for(int i = 0; i < 8; i++)
-        {
-            for(int j = 0; j < 8; j++)
-            {
-                //weißes Feld mit Nummer 0,2,4,6,8 -> 1.Reihe, 3.Reihe, 5.Reihe, 7.Reihe
-                if(i%2 == 0 && j%2 == 0)
-                {
-                    field[i][j].setColor(weiss);
-                }
-                //weißes Feld mit Nummer 1,3,5,7 -> 2.Reihe, 4.Reihe, 6.Reihe, 8.Reihe
-                else if(i%2 != 0 && j%2 != 0)
-                {
-                    field[i][j].setColor(weiss);
-                }
-                else
-                {
-                    field[i][j].setColor(schwarz);
-                }
-            }
-        }
-
-        field[0][0].setColor(1);
-        field[0][2].setColor(1);
-        field[0][4].setColor(1);
-        field[0][6].setColor(1);
-
-    }
-
-    //print Methoden
-
-    private void printFieldColors() {
-        System.out.println("Colors:");
-        for(int i = 0; i < 8; i++)
-        {
-            for(int j = 0; j < 8; j++)
-            {
-                if(j == 7)
-                {
-                    System.out.println(field[i][j].getColor());
-                }
-                else
-                {
-                    System.out.print(field[i][j].getColor() + " ");
-                }
-            }
+            move[1] = vector;
+            secondmove.setText(move[1].elementAt(0) + " " + move[1].elementAt(1));
+            //move();
         }
     }
 
-
-    private void printFieldFigures()
+    /*
+    public void move()
     {
-        System.out.println("Figuren:");
-        for(int i = 0; i < 8; i++)
-        {
-            for(int j = 0; j < 8; j++)
-            {
-                if(j == 7)
-                {
-                    System.out.println(field[i][j].getFigure());
-                }
-                else if(i < 6)
-                {
-                    System.out.print(field[i][j].getFigure() + "  ");
-                }
-                else
-                {
-                    System.out.print(field[i][j].getFigure() + " ");
-                }
-            }
-        }
+        //Figur von Vector in move[0] nach Vector in move[1] setzen
+        square[move[1].elementAt(0)+ move[1].elementAt(1)*8] = square[move[0].elementAt(0) + move[1].elementAt(1)*8];
+        square[move[0].elementAt(0) + move[1].elementAt(1)*8] = 0;
+
+
+        move[0] = null;
+        move[1] = null;
     }
 
+     */
+
+    public void switchColor(String c, int file, int rank)
+    {
+        System.out.println("switchColor " + file +  " " + rank);
+
+        int[] squareColor;
+        if(c.equals("mark")){
+             squareColor = new int[]{Var.markColor[0], Var.markColor[1], Var.markColor[2]};
+            squareRect[rank*8+file].setFill(Color.rgb(squareColor[0],squareColor[1], squareColor[2]));
+        }else
+        {
+            boolean isLightSquare = (file + rank) % 2 != 0;
+            squareColor = (isLightSquare) ? Var.lightColor : Var.darkColor;
+            squareRect[rank*8+file].setFill(Color.rgb(squareColor[0], squareColor[1], squareColor[2]));
+
+        }
+
+
+    }
+
+
+
+    private void DrawSquares(String fen)
+    {
+        int heigthSquares = 50;
+
+        square = notation.LoadPositionFromFEN(fen);
+
+        double file = 0;
+        double rank = 0;
+
+        for (int i: square) {
+            //System.out.print(i + " ");
+
+            switch(i)
+            {
+                case 0:
+                    break;
+                case 1:
+                    ImageView ivKing = new ImageView(new Image("graphics/Chess/King_white.png"));
+                    ivKing.setX(file*heigthSquares);
+                    ivKing.setY(rank*heigthSquares);
+
+                    pane.getChildren().add(ivKing);
+                    break;
+                case 2:
+                    ImageView ivQueen = new ImageView(new Image("graphics/Chess/Queen_white.png"));
+                    ivQueen.setX(file*heigthSquares);
+                    ivQueen.setY(rank*heigthSquares);
+                    pane.getChildren().add(ivQueen);
+                    break;
+                case 3:
+                    ImageView ivRook = new ImageView(new Image("graphics/Chess/Rook_white.png"));
+                    ivRook.setX(file*heigthSquares);
+                    ivRook.setY(rank*heigthSquares);
+                    pane.getChildren().add(ivRook);
+                    break;
+                case 4:
+                    ImageView ivBishop = new ImageView(new Image("graphics/Chess/Bishop_white.png"));
+                    ivBishop.setX(file*heigthSquares);
+                    ivBishop.setY(rank*heigthSquares);
+                    pane.getChildren().add(ivBishop);
+                    break;
+                case 5:
+                    ImageView ivKnight = new ImageView(new Image("graphics/Chess/Knight_white.png"));
+                    ivKnight.setX(file*heigthSquares);
+                    ivKnight.setY(rank*heigthSquares);
+                    pane.getChildren().add(ivKnight);
+                    break;
+                case 6:
+                    ImageView ivPawn = new ImageView(new Image("graphics/Chess/Pawn_white.png"));
+                    ivPawn.setX(file*heigthSquares);
+                    ivPawn.setY(rank*heigthSquares);
+                    pane.getChildren().add(ivPawn);
+                    break;
+
+                //BLACK
+
+                case 11:
+                    ImageView ivKingBlack = new ImageView(new Image("graphics/Chess/King_black.png"));
+                    ivKingBlack.setX(file*heigthSquares);
+                    ivKingBlack.setY(rank*heigthSquares);
+                    pane.getChildren().add(ivKingBlack);
+                    break;
+                case 12:
+                    ImageView ivQueenBlack = new ImageView(new Image("graphics/Chess/Queen_black.png"));
+                    ivQueenBlack.setX(file*heigthSquares);
+                    ivQueenBlack.setY(rank*heigthSquares);
+                    pane.getChildren().add(ivQueenBlack);
+                    break;
+                case 13:
+                    ImageView ivRookBlack = new ImageView(new Image("graphics/Chess/Rook_black.png"));
+                    ivRookBlack.setX(file*heigthSquares);
+                    ivRookBlack.setY(rank*heigthSquares);
+                    pane.getChildren().add(ivRookBlack);
+                    break;
+                case 14:
+                    ImageView ivBishopBlack = new ImageView(new Image("graphics/Chess/Bishop_black.png"));
+                    ivBishopBlack.setX(file*heigthSquares);
+                    ivBishopBlack.setY(rank*heigthSquares);
+                    pane.getChildren().add(ivBishopBlack);
+                    break;
+                case 15:
+                    ImageView ivKnightBlack = new ImageView(new Image("graphics/Chess/Knight_black.png"));
+                    ivKnightBlack.setX(file*heigthSquares);
+                    ivKnightBlack.setY(rank*heigthSquares);
+                    pane.getChildren().add(ivKnightBlack);
+                    break;
+                case 16:
+                    ImageView ivPawnBlack = new ImageView(new Image("graphics/Chess/Pawn_black.png"));
+                    ivPawnBlack.setX(file*heigthSquares);
+                    ivPawnBlack.setY(rank*heigthSquares);
+                    pane.getChildren().add(ivPawnBlack);
+                    break;
+
+                default:
+                    break;
+            }
+
+            file++;
+
+            if(file == 8)
+            {
+                file = 0;
+                rank++;
+            }
+
+        }
+    }
 
     //Getter Setter
 

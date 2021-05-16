@@ -6,3 +6,11 @@
     -fx-font-size: 18;
     -fx-text-fill: #B45F04;
 }
+
+.button {
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-background-radius: 0;
+    -fx-background-color: transparent;
+
+}
