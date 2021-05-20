@@ -254,7 +254,7 @@ public class Chess {
                     pane.getChildren().add(ivRook);
                     break;
                 case 4:
-                    ImageView ivBishop = new ImageView(new Image("graphics/Chess/Bishop_white.png"));
+                    ImageView ivBishop = new ImageView(new Image("graphics/PokemonPieces/Pikachu.png"));
                     ivBishop.setX(file*heigthSquares);
                     ivBishop.setY(rank*heigthSquares);
                     pane.getChildren().add(ivBishop);

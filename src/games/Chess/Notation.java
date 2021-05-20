@@ -75,7 +75,7 @@ public class Notation {
         TypePiece.put(Var.rook, 'r');
 
         StringBuilder fen = new StringBuilder("");
-        int rank = 0;
+        int rank = 7;
         int file = 0;
 
         for (int i = 0; i < square.length; i++) {
@@ -83,7 +83,7 @@ public class Notation {
             if(i % (7+rank*8) == 0)
             {
                 fen.append("/");
-                rank++;
+                rank--;
                 file = 0;
             }
             else if(square[i] == 0)
