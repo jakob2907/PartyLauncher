@@ -13,12 +13,14 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import states.BasicGame;
+import states.StateHandler;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.BitSet;
 
-public class Pong {
+public class Pong extends BasicGame {
 
     Scene s;
 
@@ -33,8 +35,10 @@ public class Pong {
     private BitSet keyboardBitSet = new BitSet();
     private int scored = 0;
 
-    public Pong()
+    public Pong(StateHandler stateHandler)
     {
+        super(stateHandler);
+
         Pane p = new Pane();
 
         p1 = new Paddle(10, 8, 20, 50);

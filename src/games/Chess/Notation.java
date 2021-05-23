@@ -20,12 +20,12 @@ public class Notation {
     public int[]  LoadPositionFromFEN(String fen)
     {
         HashMap<Character, Integer> pieceType = new HashMap<>();
-        pieceType.put('k', Var.king);
-        pieceType.put('q', Var.queen);
-        pieceType.put('n', Var.knight);
-        pieceType.put('p', Var.pawn);
-        pieceType.put('b', Var.bishop);
-        pieceType.put('r', Var.rook);
+        pieceType.put('k', Var.king * 10);
+        pieceType.put('q', Var.queen * 10);
+        pieceType.put('n', Var.knight * 10);
+        pieceType.put('p', Var.pawn * 10);
+        pieceType.put('b', Var.bishop * 10);
+        pieceType.put('r', Var.rook * 10);
         
         char[] fenBoard = fen.toCharArray();
         int file = 0, rank = 7;
@@ -67,33 +67,35 @@ public class Notation {
 
         //Black
 
-        TypePiece.put(Var.king + 10, 'k');
-        TypePiece.put(Var.queen + 10, 'q');
-        TypePiece.put(Var.knight + 10, 'n');
-        TypePiece.put(Var.pawn + 10, 'p');
-        TypePiece.put(Var.bishop + 10, 'b');
-        TypePiece.put(Var.rook + 10, 'r');
+        TypePiece.put(Var.king * 10 + Var.black, 'k');
+        TypePiece.put(Var.queen * 10 + Var.black, 'q');
+        TypePiece.put(Var.knight * 10 + Var.black, 'n');
+        TypePiece.put(Var.pawn * 10 + Var.black, 'p');
+        TypePiece.put(Var.bishop * 10 + Var.black, 'b');
+        TypePiece.put(Var.rook * 10 + Var.black, 'r');
 
         //White
 
-        TypePiece.put(Var.king, 'K');
-        TypePiece.put(Var.queen, 'Q');
-        TypePiece.put(Var.knight, 'N');
-        TypePiece.put(Var.pawn, 'P');
-        TypePiece.put(Var.bishop, 'B');
-        TypePiece.put(Var.rook, 'R');
+        TypePiece.put(Var.king * 10 + Var.white, 'K');
+        TypePiece.put(Var.queen * 10 + Var.white, 'Q');
+        TypePiece.put(Var.knight * 10 + Var.white, 'N');
+        TypePiece.put(Var.pawn * 10 + Var.white, 'P');
+        TypePiece.put(Var.bishop * 10 + Var.white, 'B');
+        TypePiece.put(Var.rook * 10 + Var.white, 'R');
 
         StringBuilder fen = new StringBuilder("");
         int rank = 7;
         int file = 0;
 
-        for (int i = 0; i < square.length; i++) {
+        for (int i = 0; i < square.length; i = i) {
 
             if(i % (7+rank*8) == 0)
             {
                 fen.append("/");
                 rank--;
                 file = 0;
+
+                i++;
             }
             else if(square[i] == 0)
             {
@@ -111,25 +113,31 @@ public class Notation {
 
                     }
                     file++;
+                    i++;
                 }
 
             }else if(square[i] != 0) {
 
                 Character figur = TypePiece.get(square[i]);
 
-                if(square[i] < 7)
+                //Schwarz
+
+                if(square[i] % 10 == 0)
                 {
                     char c = Character.toUpperCase(figur);
                     fen.append(c);
                 }
-                else if(square[i] > 10)
+
+                //Weiß
+
+                else if(square[i] % 10 != 0)
                 {
                     char c = Character.toLowerCase(figur);
                     fen.append(c);
                 }
                 file++;
+                i = i + 2;
             }
-
         }
         return fen.toString();
     }
