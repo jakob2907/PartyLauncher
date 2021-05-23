@@ -15,11 +15,6 @@ public class Notation {
         this.chess = chess;
     }
 
-    public int[] startNotation()
-    {
-        return LoadPositionFromFEN(Var.startFEN);
-    }
-
 
     //funktioniert
     public int[]  LoadPositionFromFEN(String fen)
@@ -47,6 +42,8 @@ public class Notation {
                     file += (int) Character.getNumericValue(symbol);
                 }else
                 {
+                    //K,Q,R,B,N,P -> White; k,q,r,b,n,p -> black
+
                     int pieceColor = (Character.isUpperCase(symbol)) ? Var.white : Var.black;
                     int pieceTyp = pieceType.get(Character.toLowerCase(symbol));
 
@@ -67,12 +64,24 @@ public class Notation {
     public String LoadPositionFromArray(int[] square)
     {
         HashMap<Integer, Character> TypePiece= new HashMap<>();
-        TypePiece.put(Var.king, 'k');
-        TypePiece.put(Var.queen, 'q');
-        TypePiece.put(Var.knight, 'n');
-        TypePiece.put(Var.pawn, 'p');
-        TypePiece.put(Var.bishop, 'b');
-        TypePiece.put(Var.rook, 'r');
+
+        //Black
+
+        TypePiece.put(Var.king + 10, 'k');
+        TypePiece.put(Var.queen + 10, 'q');
+        TypePiece.put(Var.knight + 10, 'n');
+        TypePiece.put(Var.pawn + 10, 'p');
+        TypePiece.put(Var.bishop + 10, 'b');
+        TypePiece.put(Var.rook + 10, 'r');
+
+        //White
+
+        TypePiece.put(Var.king, 'K');
+        TypePiece.put(Var.queen, 'Q');
+        TypePiece.put(Var.knight, 'N');
+        TypePiece.put(Var.pawn, 'P');
+        TypePiece.put(Var.bishop, 'B');
+        TypePiece.put(Var.rook, 'R');
 
         StringBuilder fen = new StringBuilder("");
         int rank = 0;

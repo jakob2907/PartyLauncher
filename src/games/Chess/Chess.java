@@ -110,6 +110,7 @@ public class Chess {
             @Override
             public void handle(long now) {
                 DrawBoard();
+
                 String s = notation.LoadPositionFromArray(square);
                 DrawSquares(s);
             }
