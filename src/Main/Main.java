@@ -25,7 +25,7 @@ public class Main extends Application {
         stateHandler = new StateHandler(this, window);
 
         //richtiger Code
-        //window.setScene(stateHandler.getScene());
+       // window.setScene(stateHandler.getScene());
 
         //Probe Code Pong
         //Pong p = new Pong();
@@ -38,7 +38,7 @@ public class Main extends Application {
         //Probe Code Chess
         Chess c = new Chess();
 
-        window.setScene(c.getScene());
+       window.setScene(c.getScene());
 
         window.getIcons().add(new Image("/graphics/StageIconChess.png"));
         window.resizableProperty().setValue(Boolean.FALSE);
