@@ -21,6 +21,7 @@ public class Var {
 
      */
 
+    static int squareHeight = 50;
 
     static int king = 1;
     static int queen = 2;

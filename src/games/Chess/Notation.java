@@ -54,7 +54,6 @@ public class Notation {
                 }
             }
         }
-        //System.out.println();
 
         return squares;
     }

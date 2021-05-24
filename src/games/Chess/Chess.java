@@ -114,6 +114,13 @@ public class Chess {
                 String s = notation.LoadPositionFromArray(square);
                 DrawSquares(s);
 
+                for (int i:square
+                     ) {
+                    System.out.print(square[i] + " ");
+
+                }
+                System.out.println();
+
             }
 
             public boolean isRunning() {
@@ -148,6 +155,7 @@ public class Chess {
     private void DrawBoard() {
 
 
+        //Funktioniert aber Implementieren mit Array -> besserer Zugriff auf einzelne Schachfelder zum Markieren
 
         for(int file = 0; file < 8; file++)
         {
@@ -162,6 +170,16 @@ public class Chess {
                 pane.getChildren().add(rect);
             }
         }
+
+        //Test Rectangle -> Markierung
+
+        int file = 1;
+        int rank = 1;
+
+        Rectangle rectn = new Rectangle(file * 50, rank * 50, 50,50);
+        rectn.setFill(Color.rgb(238, 99,99));
+        squareRect[file + rank * 8] = rectn;
+        pane.getChildren().add(squareRect[file + rank * 8]);
 
     }
     //IntVector
@@ -199,30 +217,10 @@ public class Chess {
 
      */
 
-    public void switchColor(String c, int file, int rank)
-    {
-        System.out.println("switchColor " + file +  " " + rank);
-
-        int[] squareColor;
-        if(c.equals("mark")){
-             squareColor = new int[]{Var.markColor[0], Var.markColor[1], Var.markColor[2]};
-            squareRect[rank*8+file].setFill(Color.rgb(squareColor[0],squareColor[1], squareColor[2]));
-        }else
-        {
-            boolean isLightSquare = (file + rank) % 2 != 0;
-            squareColor = (isLightSquare) ? Var.lightColor : Var.darkColor;
-            squareRect[rank*8+file].setFill(Color.rgb(squareColor[0], squareColor[1], squareColor[2]));
-
-        }
-
-
-    }
-
-
 
     private void DrawSquares(String fen)
     {
-        int heigthSquares = 50;
+        int heigthSquares = Var.squareHeight;
 
         square = notation.LoadPositionFromFEN(fen);
 
@@ -332,12 +330,6 @@ public class Chess {
     public Scene getScene()
     {
         return scene;
-    }
-
-    //TestMain
-
-    public static void main(String[] args) {
-
     }
 
 }
