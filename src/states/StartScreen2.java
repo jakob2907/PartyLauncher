@@ -13,8 +13,10 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.RowConstraints;
+import javafx.scene.media.Media;
 
-public class StartScreen extends BasicState{
+public class StartScreen2 extends BasicState{
 
     GridPane grid = new GridPane();
     GridPane gridChess = new GridPane();
@@ -23,17 +25,22 @@ public class StartScreen extends BasicState{
 
     Button b1,b2,b3,b4,b5,b6,b7,b8,b9,b10;
 
-    public StartScreen(StateHandler sh)
+    Media s1,s2,s3,s4,s5,s6,s7,s8,s9,s10;
+    public StartScreen2(StateHandler sh)
     {
         super(sh);
 
-        grid.getColumnConstraints().add(new ColumnConstraints(680/3));
-        grid.getColumnConstraints().add(new ColumnConstraints(680/3));
-        grid.getColumnConstraints().add(new ColumnConstraints(680/3));
+        grid.getColumnConstraints().add(new ColumnConstraints(100));
+        grid.getColumnConstraints().add(new ColumnConstraints(600));
+        grid.getColumnConstraints().add(new ColumnConstraints(100));
 
-        grid.setHgap(10);
-        grid.setVgap(10);
-        grid.setPadding(new Insets(10,50,20,50));
+        grid.getRowConstraints().add(new RowConstraints(100));
+        grid.getRowConstraints().add(new RowConstraints(300));
+        grid.getRowConstraints().add(new RowConstraints(200));
+
+        grid.setHgap(0);
+        grid.setVgap(0);
+        grid.setPadding(new Insets(0,0,0,0));
 
 
         gridChess.getColumnConstraints().add(new ColumnConstraints(120));
@@ -53,6 +60,20 @@ public class StartScreen extends BasicState{
         b9 = new Button();
         b10 = new Button();
 
+        s1 = new Media();
+        s2 = new Media();
+        s3 = new Media();
+        s4 = new Media();
+        s5 = new Media();
+        s6 = new Media();
+        s7 = new Media();
+        s8 = new Media();
+        s9 = new Media();
+        s10 = new Media();
+
+
+        gridChess.setGridLinesVisible(true);
+        /*
 
         fabian = new Label("Fabian Olszowi");
         GridPane.setHalignment(fabian, HPos.CENTER);
@@ -98,7 +119,12 @@ public class StartScreen extends BasicState{
         grid.add(present, 1,1);
         grid.add(chessview, 0,2);
 
-        //grid.setGridLinesVisible(true);
+
+         */
+
+        grid.add(gridChess, 1,1);
+
+        grid.setGridLinesVisible(true);
 
         s = new Scene(grid, 800, 600);
         s.getStylesheets().add("cssFiles/StartScreen.css");

@@ -7,10 +7,7 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import states.SelectState;
-import states.StartScreen;
-import states.StartState;
-import states.StateHandler;
+import states.*;
 
 public class Main extends Application {
 
@@ -25,10 +22,10 @@ public class Main extends Application {
         stateHandler = new StateHandler(this, window);
 
         //richtiger Code
-       // window.setScene(stateHandler.getScene());
+        //window.setScene(stateHandler.getScene());
 
         //Probe Code Pong
-        //Pong p = new Pong();
+        //Pong p = new Pong(stateHandler);
         //window.setScene(p.getScene());
 
         //Probe Code TTT
@@ -36,9 +33,13 @@ public class Main extends Application {
         //window.setScene(ttt.getScene());
 
         //Probe Code Chess
-        Chess c = new Chess();
+        //Chess c = new Chess();
 
-       window.setScene(c.getScene());
+       //window.setScene(c.getScene());
+
+        //ProbeCode StartScreen
+        StartScreen2 ss = new StartScreen2(stateHandler);
+        window.setScene(ss.getScene());
 
         window.getIcons().add(new Image("/graphics/StageIconChess.png"));
         window.resizableProperty().setValue(Boolean.FALSE);
