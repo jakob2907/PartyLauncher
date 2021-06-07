@@ -22,7 +22,7 @@ public class Main extends Application {
         stateHandler = new StateHandler(this, window);
 
         //richtiger Code
-        //window.setScene(stateHandler.getScene());
+        window.setScene(stateHandler.getScene());
 
         //Probe Code Pong
         //Pong p = new Pong(stateHandler);
@@ -38,8 +38,8 @@ public class Main extends Application {
        //window.setScene(c.getScene());
 
         //ProbeCode StartScreen
-        StartScreen2 ss = new StartScreen2(stateHandler);
-        window.setScene(ss.getScene());
+        //StartScreen2 ss = new StartScreen2(stateHandler);
+        //window.setScene(ss.getScene());
 
         window.getIcons().add(new Image("/graphics/StageIconChess.png"));
         window.resizableProperty().setValue(Boolean.FALSE);

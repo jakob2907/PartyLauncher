@@ -32,6 +32,7 @@ import java.util.BitSet;
 
 public class Pong extends BasicGame {
 
+    boolean pausetoggle;
     Scene s;
 
     Paddle p1,p2;
@@ -72,6 +73,7 @@ public class Pong extends BasicGame {
         score.setLayoutY(200);
 
         paused = false;
+        pausetoggle=false;
 
         enter=new Label("Press 'ENTER' to start the game");
         enter.setLayoutX(140);
@@ -243,7 +245,7 @@ public class Pong extends BasicGame {
         }
 
         for(int i = 0; i < eingaben.size(); i++) {
-            if (paused==false) {
+            if (pausetoggle==false) {
 
                 if (eingaben.get(i).equals("W")) {
                     if (p1.getY() > 0) {
@@ -335,6 +337,7 @@ public class Pong extends BasicGame {
     }
 
     private void showStopGUI() {
+
         if(paused==true){
             at.stop();
             pause.setVisible(true);
@@ -342,6 +345,7 @@ public class Pong extends BasicGame {
             rb2.setVisible(true);
             rb3.setVisible(true);
             paused = false;
+            pausetoggle = true;
         }
         else{
             at.start();
@@ -350,6 +354,7 @@ public class Pong extends BasicGame {
             rb2.setVisible(false);
             rb3.setVisible(false);
             paused = true;
+            pausetoggle=false;
         }
     }
 
