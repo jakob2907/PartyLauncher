@@ -110,8 +110,17 @@ public class Chess {
             @Override
             public void handle(long now) {
                 DrawBoard();
+
                 String s = notation.LoadPositionFromArray(square);
                 DrawSquares(s);
+
+                for (int i:square
+                     ) {
+                    System.out.print(square[i] + " ");
+
+                }
+                System.out.println();
+
             }
 
             public boolean isRunning() {
@@ -146,6 +155,7 @@ public class Chess {
     private void DrawBoard() {
 
 
+        //Funktioniert aber Implementieren mit Array -> besserer Zugriff auf einzelne Schachfelder zum Markieren
 
         for(int file = 0; file < 8; file++)
         {
@@ -160,6 +170,16 @@ public class Chess {
                 pane.getChildren().add(rect);
             }
         }
+
+        //Test Rectangle -> Markierung
+
+        int file = 1;
+        int rank = 1;
+
+        Rectangle rectn = new Rectangle(file * 50, rank * 50, 50,50);
+        rectn.setFill(Color.rgb(238, 99,99));
+        squareRect[file + rank * 8] = rectn;
+        pane.getChildren().add(squareRect[file + rank * 8]);
 
     }
     //IntVector
@@ -197,30 +217,10 @@ public class Chess {
 
      */
 
-    public void switchColor(String c, int file, int rank)
-    {
-        System.out.println("switchColor " + file +  " " + rank);
-
-        int[] squareColor;
-        if(c.equals("mark")){
-             squareColor = new int[]{Var.markColor[0], Var.markColor[1], Var.markColor[2]};
-            squareRect[rank*8+file].setFill(Color.rgb(squareColor[0],squareColor[1], squareColor[2]));
-        }else
-        {
-            boolean isLightSquare = (file + rank) % 2 != 0;
-            squareColor = (isLightSquare) ? Var.lightColor : Var.darkColor;
-            squareRect[rank*8+file].setFill(Color.rgb(squareColor[0], squareColor[1], squareColor[2]));
-
-        }
-
-
-    }
-
-
 
     private void DrawSquares(String fen)
     {
-        int heigthSquares = 50;
+        int heigthSquares = Var.squareHeight;
 
         square = notation.LoadPositionFromFEN(fen);
 
@@ -228,44 +228,43 @@ public class Chess {
         double rank = 0;
 
         for (int i: square) {
-            //System.out.print(i + " ");
 
             switch(i)
             {
                 case 0:
                     break;
-                case 1:
+                case 10:
                     ImageView ivKing = new ImageView(new Image("graphics/Chess/King_white.png"));
                     ivKing.setX(file*heigthSquares);
                     ivKing.setY(rank*heigthSquares);
 
                     pane.getChildren().add(ivKing);
                     break;
-                case 2:
+                case 20:
                     ImageView ivQueen = new ImageView(new Image("graphics/Chess/Queen_white.png"));
                     ivQueen.setX(file*heigthSquares);
                     ivQueen.setY(rank*heigthSquares);
                     pane.getChildren().add(ivQueen);
                     break;
-                case 3:
+                case 30:
                     ImageView ivRook = new ImageView(new Image("graphics/Chess/Rook_white.png"));
                     ivRook.setX(file*heigthSquares);
                     ivRook.setY(rank*heigthSquares);
                     pane.getChildren().add(ivRook);
                     break;
-                case 4:
+                case 40:
                     ImageView ivBishop = new ImageView(new Image("graphics/PokemonPieces/Pikachu.png"));
                     ivBishop.setX(file*heigthSquares);
                     ivBishop.setY(rank*heigthSquares);
                     pane.getChildren().add(ivBishop);
                     break;
-                case 5:
+                case 50:
                     ImageView ivKnight = new ImageView(new Image("graphics/Chess/Knight_white.png"));
                     ivKnight.setX(file*heigthSquares);
                     ivKnight.setY(rank*heigthSquares);
                     pane.getChildren().add(ivKnight);
                     break;
-                case 6:
+                case 60:
                     ImageView ivPawn = new ImageView(new Image("graphics/Chess/Pawn_white.png"));
                     ivPawn.setX(file*heigthSquares);
                     ivPawn.setY(rank*heigthSquares);
@@ -280,31 +279,31 @@ public class Chess {
                     ivKingBlack.setY(rank*heigthSquares);
                     pane.getChildren().add(ivKingBlack);
                     break;
-                case 12:
+                case 21:
                     ImageView ivQueenBlack = new ImageView(new Image("graphics/Chess/Queen_black.png"));
                     ivQueenBlack.setX(file*heigthSquares);
                     ivQueenBlack.setY(rank*heigthSquares);
                     pane.getChildren().add(ivQueenBlack);
                     break;
-                case 13:
+                case 31:
                     ImageView ivRookBlack = new ImageView(new Image("graphics/Chess/Rook_black.png"));
                     ivRookBlack.setX(file*heigthSquares);
                     ivRookBlack.setY(rank*heigthSquares);
                     pane.getChildren().add(ivRookBlack);
                     break;
-                case 14:
+                case 41:
                     ImageView ivBishopBlack = new ImageView(new Image("graphics/Chess/Bishop_black.png"));
                     ivBishopBlack.setX(file*heigthSquares);
                     ivBishopBlack.setY(rank*heigthSquares);
                     pane.getChildren().add(ivBishopBlack);
                     break;
-                case 15:
+                case 51:
                     ImageView ivKnightBlack = new ImageView(new Image("graphics/Chess/Knight_black.png"));
                     ivKnightBlack.setX(file*heigthSquares);
                     ivKnightBlack.setY(rank*heigthSquares);
                     pane.getChildren().add(ivKnightBlack);
                     break;
-                case 16:
+                case 61:
                     ImageView ivPawnBlack = new ImageView(new Image("graphics/Chess/Pawn_black.png"));
                     ivPawnBlack.setX(file*heigthSquares);
                     ivPawnBlack.setY(rank*heigthSquares);
@@ -331,12 +330,6 @@ public class Chess {
     public Scene getScene()
     {
         return scene;
-    }
-
-    //TestMain
-
-    public static void main(String[] args) {
-
     }
 
 }
